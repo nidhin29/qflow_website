@@ -99,6 +99,7 @@
     border-radius: 12px;
 
     border: 1px solid #e2e8f0;
+    
     background-color: #ffffff;
     font-size: 1rem;
     font-weight: 600;
@@ -106,7 +107,7 @@
     color: var(--text-main);
     cursor: text;
     outline: none;
-    
+
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
     min-width: 160px;
