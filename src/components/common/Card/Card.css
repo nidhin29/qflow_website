@@ -1,0 +1,33 @@
+.card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(226, 232, 240, 0.7);
+    box-shadow: var(--shadow-sm);
+    padding: var(--spacing-xl);
+    overflow: hidden;
+    position: relative;
+}
+
+.card.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.card-header {
+    margin-bottom: var(--spacing-xl);
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: var(--spacing-md);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+}
+
+.card-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
