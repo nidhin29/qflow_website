@@ -40,7 +40,9 @@ const RegisterPage = () => {
             <div className="auth-mesh-gradient"></div>
             <Card className="auth-card shadow-premium">
                 <div className="auth-header" style={{ marginBottom: '2rem', textAlign: 'center' }}>
-                    <div className="auth-logo" style={{ borderRadius: '12px', width: '48px', height: '48px', fontSize: '1.5rem', margin: '0 auto 1rem' }}>Q</div>
+                    <div className="auth-logo" style={{ width: '60px', height: '60px', background: 'none', boxShadow: 'none', margin: '0 auto 1.5rem' }}>
+                        <img src="/icon.png" alt="Qflow Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    </div>
                     <h1 style={{ fontSize: '1.5rem' }}>Hospital Registration</h1>
                     <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Start managing your patient flow with Qflow</p>
                 </div>

@@ -78,7 +78,9 @@ const RegisterDetailsPage = () => {
             <div className="auth-mesh-gradient"></div>
             <Card className="details-main-card shadow-premium">
                 <header className="details-header">
-                    <div className="auth-logo">Q</div>
+                    <div className="auth-logo" style={{ width: '60px', height: '60px', background: 'none', boxShadow: 'none', margin: '0 auto 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <img src="/icon.png" alt="Qflow Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    </div>
                     <h1>Complete Profile</h1>
                     <p>Finalize your facility setup to enter the dashboard</p>
                 </header>
