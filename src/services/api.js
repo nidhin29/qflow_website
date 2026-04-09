@@ -1,4 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = "https://backend.devforchange.com/api/v1";
+console.log(BASE_URL);
 
 let isRefreshing = false;
 let failedQueue = [];

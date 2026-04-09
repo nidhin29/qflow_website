@@ -29,13 +29,18 @@ const RegisterDetailsPage = () => {
         average_consultation_time: '15'
     });
     const [profileImage, setProfileImage] = useState(null);
+    const [receptionistImage, setReceptionistImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const { refreshHospitalDetails } = useAuth();
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         if (e.target.type === 'file') {
-            setProfileImage(e.target.files[0]);
+            if (e.target.name === 'receptionist_image') {
+                setReceptionistImage(e.target.files[0]);
+            } else {
+                setProfileImage(e.target.files[0]);
+            }
         } else {
             setFormData({ ...formData, [e.target.name]: e.target.value });
         }
@@ -60,6 +65,10 @@ const RegisterDetailsPage = () => {
 
             if (profileImage) {
                 formDataToSend.append('profile_image', profileImage);
+            }
+
+            if (receptionistImage) {
+                formDataToSend.append('receptionist_image', receptionistImage);
             }
 
             await api.post('/hospital/register-details', formDataToSend);
@@ -104,6 +113,12 @@ const RegisterDetailsPage = () => {
                                 onChange={handleChange}
                                 placeholder="+91..."
                                 required
+                            />
+                            <Input
+                                label="Receptionist Photo"
+                                name="receptionist_image"
+                                type="file"
+                                onChange={handleChange}
                             />
                         </div>
                     </section>

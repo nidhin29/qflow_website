@@ -20,10 +20,13 @@ const ProfilePage = () => {
         hospital_name: '',
         available_services: '',
         average_consultation_time: '',
-        profile_image: ''
+        profile_image: '',
+        receptionist_image: ''
     });
     const [newImage, setNewImage] = useState(null);
+    const [newReceptionistImage, setNewReceptionistImage] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
+    const [receptionistPreviewUrl, setReceptionistPreviewUrl] = useState('');
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(false);
     const [error, setError] = useState('');
@@ -62,12 +65,22 @@ const ProfilePage = () => {
             available_services: services || ''
         });
 
+        const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        
         const initialImg = data.profile_image_thumbnail || data.profile_image;
         if (initialImg) {
             const imgUrl = initialImg.startsWith('http')
                 ? initialImg
-                : `http://localhost:8000${initialImg}`;
+                : `${apiBase}${initialImg}`;
             setPreviewUrl(imgUrl);
+        }
+
+        const initialRecImg = data.receptionist_image_thumbnail || data.receptionist_image;
+        if (initialRecImg) {
+            const imgUrl = initialRecImg.startsWith('http')
+                ? initialRecImg
+                : `${apiBase}${initialRecImg}`;
+            setReceptionistPreviewUrl(imgUrl);
         }
     }, []);
 
@@ -84,8 +97,13 @@ const ProfilePage = () => {
     const handleChange = (e) => {
         if (e.target.type === 'file') {
             const file = e.target.files[0];
-            setNewImage(file);
-            if (file) setPreviewUrl(URL.createObjectURL(file));
+            if (e.target.name === 'receptionist_image') {
+                setNewReceptionistImage(file);
+                if (file) setReceptionistPreviewUrl(URL.createObjectURL(file));
+            } else {
+                setNewImage(file);
+                if (file) setPreviewUrl(URL.createObjectURL(file));
+            }
         } else {
             setDetails({ ...details, [e.target.name]: e.target.value });
         }
@@ -122,6 +140,10 @@ const ProfilePage = () => {
 
             if (newImage) {
                 formDataToSend.append('profile_image', newImage);
+            }
+
+            if (newReceptionistImage) {
+                formDataToSend.append('receptionist_image', newReceptionistImage);
             }
 
             await api.put('/hospital/update-hospital-details', formDataToSend);
@@ -208,6 +230,21 @@ const ProfilePage = () => {
                                 placeholder="+91..."
                                 required
                             />
+                            <div className="receptionist-photo-field">
+                                <label className="receptionist-photo-label">Receptionist Photo</label>
+                                <div className="receptionist-photo-preview-container">
+                                    {receptionistPreviewUrl ? (
+                                        <img src={receptionistPreviewUrl} alt="Receptionist" className="receptionist-preview-mini" />
+                                    ) : (
+                                        <div className="receptionist-placeholder-mini">{details.receptionist_name?.charAt(0) || 'R'}</div>
+                                    )}
+                                    <label className="receptionist-upload-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>
+                                        <span>Change</span>
+                                        <input type="file" name="receptionist_image" onChange={handleChange} style={{ display: 'none' }} />
+                                    </label>
+                                </div>
+                            </div>
                         </div>
 
                         <div className="form-section-title">Location & Logistics</div>

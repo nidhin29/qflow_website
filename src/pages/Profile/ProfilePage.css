@@ -217,3 +217,65 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Receptionist Photo Styles */
+.receptionist-photo-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.receptionist-photo-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.receptionist-photo-preview-container {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.receptionist-preview-mini {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid var(--primary-light);
+    box-shadow: 0 4px 10px rgba(11, 46, 38, 0.1);
+}
+
+.receptionist-placeholder-mini {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(11, 46, 38, 0.1);
+}
+
+.receptionist-upload-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.receptionist-upload-btn:hover {
+    background: #f8fafc;
+    border-color: var(--primary-light);
+    color: var(--primary);
+}
