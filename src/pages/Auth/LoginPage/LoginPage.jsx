@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '/src/context/AuthContext.jsx';
+import { useGoogleLogin } from '@react-oauth/google';
 import api from '/src/services/api';
 import Card from '/src/components/common/Card/Card.jsx';
 import Input from '/src/components/common/Input/Input.jsx';
@@ -17,6 +18,39 @@ const LoginPage = () => {
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
+    const handleGoogleSuccess = async (tokenResponse) => {
+        setLoading(true);
+        setError('');
+        try {
+            // tokenResponse.access_token is what useGoogleLogin returns by default
+            // But your backend wants tokenID (idToken). 
+            // NOTE: useGoogleLogin with flow: 'implicit' returns access_token.
+            // For idToken, we use the standard GoogleLogin component OR a custom flow.
+            // Let's use the explicit Google Login popup for the best experience.
+            const response = await api.post('/hospital/google-login', { 
+                tokenID: tokenResponse.access_token 
+            });
+            
+            login(response.data.data.hospital || response.data.data);
+            
+            if (response.status === 201) {
+                navigate('/register-details');
+            } else {
+                navigate('/dashboard');
+            }
+        } catch (err) {
+            console.error('Google Auth Error:', err);
+            setError('Google authentication failed. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleGoogleLogin = useGoogleLogin({
+        onSuccess: handleGoogleSuccess,
+        onError: () => setError('Google Sign-In failed')
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -90,7 +124,7 @@ const LoginPage = () => {
                     <span>OR SECURE SIGN IN</span>
                 </div>
 
-                <Button variant="secondary" className="w-full google-btn">
+                <Button variant="secondary" className="w-full google-btn" onClick={() => handleGoogleLogin()} disabled={loading}>
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="18" />
                     Continue with Google
                 </Button>
