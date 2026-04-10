@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '/src/context/AuthContext.jsx';
-import { useGoogleLogin } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 import api from '/src/services/api';
 import Card from '/src/components/common/Card/Card.jsx';
 import Input from '/src/components/common/Input/Input.jsx';
@@ -19,17 +19,12 @@ const LoginPage = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleGoogleSuccess = async (tokenResponse) => {
+    const handleGoogleSuccess = async (credentialResponse) => {
         setLoading(true);
         setError('');
         try {
-            // tokenResponse.access_token is what useGoogleLogin returns by default
-            // But your backend wants tokenID (idToken). 
-            // NOTE: useGoogleLogin with flow: 'implicit' returns access_token.
-            // For idToken, we use the standard GoogleLogin component OR a custom flow.
-            // Let's use the explicit Google Login popup for the best experience.
             const response = await api.post('/hospital/google-login', { 
-                tokenID: tokenResponse.access_token 
+                tokenID: credentialResponse.credential 
             });
             
             login(response.data.data.hospital || response.data.data);
@@ -46,11 +41,6 @@ const LoginPage = () => {
             setLoading(false);
         }
     };
-
-    const handleGoogleLogin = useGoogleLogin({
-        onSuccess: handleGoogleSuccess,
-        onError: () => setError('Google Sign-In failed')
-    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -124,10 +114,16 @@ const LoginPage = () => {
                     <span>OR SECURE SIGN IN</span>
                 </div>
 
-                <Button variant="secondary" className="w-full google-btn" onClick={() => handleGoogleLogin()} disabled={loading}>
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="18" />
-                    Continue with Google
-                </Button>
+                <div className="google-login-container" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={() => setError('Google Sign-In failed')}
+                        theme="outline"
+                        size="large"
+                        shape="rectangular"
+                        width="340"
+                    />
+                </div>
 
                 <p className="auth-footer">
                     Don't have an account? <Link to="/register">Create Hospital Account</Link>
