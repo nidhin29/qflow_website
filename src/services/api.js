@@ -68,7 +68,6 @@ const customFetch = async (url, options) => {
                 isRefreshing = false;
                 processQueue(new Error('Refresh token invalid'));
                 localStorage.clear();
-                window.location.href = '/login';
                 throw { status: 401, message: 'Session Expired' };
             }
         }
@@ -77,7 +76,6 @@ const customFetch = async (url, options) => {
     } catch (error) {
         if (error.status === 401 && url.includes('/refresh-token')) {
             localStorage.clear();
-            window.location.href = '/login';
         }
         throw error;
     }

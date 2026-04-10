@@ -22,22 +22,26 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const initAuth = async () => {
-            // ALWAYS try fetching profile to force browser to send cookies, verifying the session
-            const data = await refreshHospitalDetails();
+            try {
+                // Try fetching profile to verify the session
+                const data = await refreshHospitalDetails();
 
-            if (data) {
-                // Backend accepted the cookies!
-                const storedUser = localStorage.getItem('hospital_user');
-                if (storedUser) {
-                    setUser(JSON.parse(storedUser));
+                if (data) {
+                    const storedUser = localStorage.getItem('hospital_user');
+                    if (storedUser) {
+                        setUser(JSON.parse(storedUser));
+                    } else {
+                        setUser({ name: data.name || data.hospital_name });
+                    }
                 } else {
-                    setUser({ name: data.name || data.hospital_name });
+                    setUser(null);
                 }
-            } else {
+            } catch (err) {
+                // Silently fail if not logged in
                 setUser(null);
+            } finally {
+                setLoading(false);
             }
-
-            setLoading(false); // Unblock the protected routes
         };
         initAuth();
     }, [refreshHospitalDetails]);
